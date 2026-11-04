@@ -1,0 +1,15 @@
+sequenceDiagram
+  participant R as Raj, colleague
+  participant P as Phone platform
+  participant PSA as PSA Subscriber
+  participant ACD as Contact center
+  participant A as Priya
+  R->>P: Dials Priya's extension
+  P->>A: Rings Priya's work phone
+  P-->>PSA: Call connected, number is an extension
+  Note over PSA: Not an agent leg. Rule type Subscriber
+  PSA->>ACD: gRPC: Priya is Unavailable-UC
+  Note over ACD: No customer calls routed to Priya
+  R->>P: Hangs up
+  P-->>PSA: Call ended
+  PSA->>ACD: Restore Priya's last permanent state

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 510" width="600" height="510" font-family="'Segoe Print','Comic Sans MS','Chalkboard SE','Comic Neue',cursive" fill="#1f2a37"><defs>
+<filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4" result="n"/>
+  <feDisplacementMap in="SourceGraphic" in2="n" scale="3.5"/>
+</filter>
+<pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#e8eef5" stroke-width="1"/></pattern>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1f2a37"/></marker>
+<marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2f5fd0"/></marker>
+<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#d64545"/></marker>
+<marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2f9e5b"/></marker>
+<symbol id="person" viewBox="-30 -30 60 90" width="60" height="90" overflow="visible">
+  <g fill="none" stroke="#1f2a37" stroke-width="3" stroke-linecap="round"><circle cx="0" cy="-12" r="16" fill="#fff"/><path d="M0 4V38M-20 18L0 10L20 18M0 38L-14 58M0 38L14 58"/></g>
+</symbol>
+<symbol id="phone" viewBox="0 0 64 100" width="64" height="100" overflow="visible">
+  <g stroke="#1f2a37" stroke-width="3"><rect x="2" y="2" width="60" height="96" rx="10" fill="#fff"/><rect x="10" y="14" width="44" height="60" rx="3" fill="#e6eefc"/><circle cx="32" cy="86" r="5" fill="#fff"/></g>
+</symbol>
+</defs><rect width="600" height="510" fill="#ffffff"/><rect width="600" height="510" fill="url(#grid)"/><g transform="translate(15,15)"><rect width="570" height="480" rx="14" fill="#fff" stroke="#1f2a37" stroke-width="3" filter="url(#rough)"/><circle cx="36" cy="38" r="17" fill="#2f5fd0"/><text x="36" y="45" text-anchor="middle" font-size="18" fill="#fff" font-weight="700">6</text><text x="64" y="46" font-size="22" font-weight="700">Respect the person</text>
+<g filter="url(#rough)">
+  <rect x="30" y="86" width="100" height="40" rx="20" fill="#fff4cf" stroke="#b8941a" stroke-width="2.5"/>
+  <rect x="200" y="86" width="110" height="40" rx="20" fill="#fde8e8" stroke="#d64545" stroke-width="2.5"/>
+  <rect x="380" y="86" width="100" height="40" rx="20" fill="#fff4cf" stroke="#b8941a" stroke-width="2.5"/>
+  <path d="M132 106H196" stroke="#1f2a37" stroke-width="2.5" marker-end="url(#ar)"/>
+  <path d="M312 106H376" stroke="#1f2a37" stroke-width="2.5" marker-end="url(#ar)"/>
+  <path d="M206 232 H496" stroke="#1f2a37" stroke-width="3" stroke-dasharray="8 6"/>
+  <use href="#person" x="200" y="202" width="44" height="66"/>
+  <use href="#person" x="310" y="202" width="44" height="66"/>
+  <use href="#person" x="420" y="202" width="44" height="66"/>
+</g>
+<text x="80" y="111" text-anchor="middle" font-size="14" font-weight="700">Lunch</text><text x="255" y="111" text-anchor="middle" font-size="14" font-weight="700">On a call</text><text x="430" y="111" text-anchor="middle" font-size="14" font-weight="700">Lunch</text>
+<text x="30" y="156" text-anchor="start" font-size="14" fill="#566476">After a call, Priya goes back to what she was doing.</text>
+<text x="30" y="176" text-anchor="start" font-size="14" fill="#566476">The system only undoes changes it made itself.</text>
+<text x="92" y="234" text-anchor="middle" font-size="14" font-weight="700">Conference</text><text x="92" y="254" text-anchor="middle" font-size="14" font-weight="700">or transfer</text>
+<text x="222" y="296" text-anchor="middle" font-size="13" font-weight="700">Priya</text><text x="222" y="314" text-anchor="middle" font-size="13" font-weight="700" fill="#2f9e5b">hangs up: free</text>
+<text x="332" y="314" text-anchor="middle" font-size="13" fill="#d64545">still busy</text><text x="442" y="314" text-anchor="middle" font-size="13" fill="#d64545">still busy</text>
+<text x="30" y="390" font-size="15">•</text><text x="46" y="390" font-size="15">On calls with several people, each person is</text><text x="46" y="412" font-size="15">tracked separately.</text><text x="30" y="434" font-size="15">•</text><text x="46" y="434" font-size="15">When Priya hangs up, only Priya becomes free.</text><text x="30" y="456" font-size="15">•</text><text x="46" y="456" font-size="15">Manual choices like Lunch always win.</text></g></svg>
