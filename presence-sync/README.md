@@ -59,6 +59,16 @@ Scala, Java, Go, Akka, Play, Slick, gRPC, Angular, Redis, PostgreSQL, DynamoDB, 
 
 ## Architecture
 
+### At a glance
+
+![Presence Sync at a glance](diagrams/at-a-glance.svg)
+
+- **Contact center to phone platform (green):** a customer call puts Priya in Working (On Call) in the contact center, and Presence Sync shows her as "Busy - Contact Center" on her phone platform, so other callers can't get through.
+- **Phone platform to contact center (orange):** an internal call on her work phone makes her Unavailable-UC in the contact center, so no customer is routed to her.
+- **Rules** map each contact-center state to a phone-platform status, in one direction or both.
+
+### Components
+
 ![Presence Sync architecture](diagrams/architecture.svg)
 
 - Two independent services: a **Publisher** (contact center to phone platform, green) and a **Subscriber** (phone platform to contact center, orange). **DirectorySync** runs both ways (purple).
