@@ -1,0 +1,31 @@
+---
+config:
+  flowchart:
+    htmlLabels: false
+    curve: basis
+---
+flowchart LR
+  AD["Contact center users
+name, phone, extension"] <-- "both ways" --> DS["DirectorySync"]
+  DS <-- "both ways" --> PU["Partner users
+givenName, businessPhone, mobilePhone"]
+  DS --> M["Field mapping
+firstName to givenName
+phone to businessPhone
+mobile to mobilePhone"]
+  DS --> N["Phone number translation
+dialing pattern plus extension"]
+  DS --> V["Agent-level availability view in the UI:
+who is free across a team or tenant"]
+  V --> T["Agent adds a teammate to a customer call:
+cold or warm transfer"]
+  class AD cc
+  class DS,M,N psa
+  class PU partner
+  class V,T ok
+  classDef psa fill:#e6eefc,stroke:#2f5fd0,stroke-width:2px,color:#1f2a37
+  classDef cc fill:#f1f3f6,stroke:#7a8797,stroke-width:2px,color:#1f2a37
+  classDef partner fill:#f3ecff,stroke:#7b4fd6,stroke-width:2px,color:#1f2a37
+  classDef decide fill:#fff8e1,stroke:#b8941a,stroke-width:2px,color:#1f2a37
+  classDef stop fill:#fde8e8,stroke:#d64545,stroke-width:2px,color:#1f2a37
+  classDef ok fill:#eaf7ef,stroke:#2f9e5b,stroke-width:2px,color:#1f2a37

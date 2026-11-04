@@ -1,0 +1,22 @@
+sequenceDiagram
+  participant C as Customer
+  participant ACD as Contact center
+  participant PSA as PSA
+  participant P as Phone platform
+  participant A as Priya
+  participant R as Raj
+  C->>ACD: Calls the contact center
+  ACD->>A: Delivers the call through Priya's phone
+  ACD-->>PSA: Priya: Working
+  PSA->>P: Publisher side: Priya's presence Busy
+  A->>P: Dials Raj's extension to bring him in
+  P-->>PSA: Raj: call connected, extension
+  PSA->>ACD: Subscriber side: Raj Unavailable-UC
+  Note over C,R: Customer, Priya and Raj on one call
+  A->>P: Priya drops off, warm transfer done
+  ACD-->>PSA: Priya: Available
+  PSA->>P: Priya's presence Available
+  Note over R: Raj stays busy until his own leg ends
+  R->>P: Raj hangs up
+  P-->>PSA: Raj: call ended
+  PSA->>ACD: Raj back to his last permanent state

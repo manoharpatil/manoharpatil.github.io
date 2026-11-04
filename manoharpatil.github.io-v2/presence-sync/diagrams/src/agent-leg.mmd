@@ -1,0 +1,21 @@
+sequenceDiagram
+  participant C as Customer
+  participant ACD as Contact center
+  participant PUB as PSA Publisher
+  participant RD as Redis
+  participant RC as RingCentral
+  participant SUB as PSA Subscriber
+  C->>ACD: Calls the contact center
+  ACD->>PUB: AgentLegDialing, via Kinesis
+  PUB->>RD: Set agent leg tag, status active
+  ACD->>RC: Deliver the call to the agent's softphone
+  RC-->>SUB: CallConnected
+  SUB->>RD: Agent leg tag set?
+  RD-->>SUB: Yes
+  Note over SUB: Ignore: the contact center's own call
+  C->>ACD: Hangs up
+  ACD->>PUB: ContactRemoved, AgentLegDisconnected
+  PUB->>RD: Agent leg status inactive
+  RC-->>SUB: Second CallConnected, then NoCall
+  Note over SUB: Handled: no state flip-flop
+  Note over RC,SUB: Race fix: if the event beats the tag, check the number. A customer-line number means it's our call
