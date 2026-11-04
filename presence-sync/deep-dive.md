@@ -5,21 +5,21 @@
 The technical detail behind the [Presence Sync story](README.md). In these diagrams, **ACD** is the contact center's routing engine (NICE inContact), **MAX** is the agent's contact-center desktop, and **UC** or **partner** is the phone platform (RingCentral, Teams, Zoom and others).
 
 **Contents:** 
-[1. Architecture](#architecture) ·
-[2. Publisher flow](#publisher-flow) ·
-[3. Subscriber flow](#subscriber-flow) ·
-[4. One call, end to end](#one-call) ·
-[5. Agent leg and the echo](#agent-leg) ·
-[6. Events](#events) ·
-[7. Edge cases](#edge-cases) ·
-[8. Scale-out](#scale-out) ·
-[9. Onboarding](#onboarding) ·
-[10. Subscriptions](#subscriptions) ·
-[11. Debugging](#debugging) ·
-[12. Timeline](#timeline) ·
-[13. Partners](#partners)
+[1. Architecture](#architecture-the-big-picture) ·
+[2. Publisher flow](#publisher-flow-acd-to-uc) ·
+[3. Subscriber flow](#subscriber-flow-uc-to-acd) ·
+[4. One call, end to end](#one-call-end-to-end) ·
+[5. Agent leg and the echo](#agent-leg-and-the-echo) ·
+[6. Events](#events-psa-reacts-to) ·
+[7. Edge cases](#edge-cases-covered) ·
+[8. Scale-out](#scale-out-tenant-sharding) ·
+[9. Onboarding](#tenant-onboarding-the-ux-i-designed) ·
+[10. Subscriptions](#subscription-lifecycle-ringcentral-example) ·
+[11. Debugging](#debugging-with-90-minutes-of-talk-time) ·
+[12. Timeline](#timeline-how-it-grew) ·
+[13. Partners](#supported-partners)
 
-<a id="architecture"></a>
+<a id="architecture-the-big-picture"></a>
 ## 1. Architecture: the big picture
 
 ![Presence Sync architecture](diagrams/architecture.svg)
@@ -31,7 +31,7 @@ The technical detail behind the [Presence Sync story](README.md). In these diagr
 
 > **Say it like this:** "Two independent services. The Publisher pushes contact-center state out to the phone platform; the Subscriber takes phone-platform events and sets contact-center state. The ACD still does skill-based routing. PSA decides whether an agent can be routed at all."
 
-<a id="publisher-flow"></a>
+<a id="publisher-flow-acd-to-uc"></a>
 ## 2. Publisher flow: ACD to UC
 
 ![Publisher flow](diagrams/publisher-flow.svg)
@@ -46,7 +46,7 @@ The technical detail behind the [Presence Sync story](README.md). In these diagr
 
 > **Say it like this:** "One actor per partner, per tenant and per agent, so one tenant's problem stays in that tenant. Smallest-mailbox routing for throughput, and consistent hashing so each agent's state changes are applied in order."
 
-<a id="subscriber-flow"></a>
+<a id="subscriber-flow-uc-to-acd"></a>
 ## 3. Subscriber flow: UC to ACD
 
 ![Subscriber flow](diagrams/subscriber-flow.svg)
@@ -57,7 +57,7 @@ The technical detail behind the [Presence Sync story](README.md). In these diagr
 
 > **Say it like this:** "Every partner speaks a different protocol, so each one gets its own inbound adapter. After that, all partners share one generic workflow. The hardest rule is ownership: PSA only undoes what PSA did."
 
-<a id="one-call"></a>
+<a id="one-call-end-to-end"></a>
 ## 4. One call, end to end
 
 **Publisher rule: a customer call**
@@ -74,7 +74,7 @@ The technical detail behind the [Presence Sync story](README.md). In these diagr
 
 > **Say it like this:** "PSA tracks state per agent leg, not per call. In conferences and transfers, people join and drop at different times, so each person is set and reset on their own. No 'get state' calls on the hot path: state lives in Redis, and after a call the agent goes back to their last permanent state, so Lunch stays Lunch."
 
-<a id="agent-leg"></a>
+<a id="agent-leg-and-the-echo"></a>
 ## 5. Agent leg and the echo
 
 ![Agent leg and the echo](diagrams/agent-leg.svg)
@@ -85,7 +85,7 @@ The technical detail behind the [Presence Sync story](README.md). In these diagr
 
 > **Say it like this:** "The tag is the fast path, a local Redis lookup with no call to the partner. The number check is the safety net for the race."
 
-<a id="events"></a>
+<a id="events-psa-reacts-to"></a>
 ## 6. Events PSA reacts to
 
 | Source | Event or field | What it means |
@@ -100,7 +100,7 @@ The technical detail behind the [Presence Sync story](README.md). In these diagr
 | Partner | Termination type | final; only when a call ends |
 | Partner | presenceStatus | Available, Busy, DND, Offline or Invisible |
 
-<a id="edge-cases"></a>
+<a id="edge-cases-covered"></a>
 ## 7. Edge cases covered
 
 | Case | What PSA does |
@@ -111,7 +111,7 @@ The technical detail behind the [Presence Sync story](README.md). In these diagr
 | **Agent without a rule** | No action. |
 | **RingCentral's second CallConnected** | RingCentral sends a second CallConnected when the customer hangs up; PSA handles it without flipping the agent's state. |
 
-<a id="scale-out"></a>
+<a id="scale-out-tenant-sharding"></a>
 ## 8. Scale-out: tenant sharding
 
 ![Scale-out by tenant](diagrams/scale-out.svg)
@@ -120,7 +120,7 @@ The technical detail behind the [Presence Sync story](README.md). In these diagr
 - Each node's Node Manager processes only its own tenants; adding capacity means adding nodes.
 - Configuration changes from the PSA APIs reach every node through SNS.
 
-<a id="onboarding"></a>
+<a id="tenant-onboarding-the-ux-i-designed"></a>
 ## 9. Tenant onboarding: the UX I designed
 
 ![Tenant onboarding](diagrams/onboarding.svg)
@@ -135,14 +135,14 @@ The technical detail behind the [Presence Sync story](README.md). In these diagr
 - **Account mapping per partner:** a tenant can take presence from one platform and its directory from another (for example, presence from RingCentral and directory from MS Teams), so each gets its own account mapping.
 - **Admin levels:** the contact center's admin hierarchy (NICE admin, partner admin, customer tenant) belongs to the ACD team. NICE and partner admins can view a tenant's setup, but not register it or change its credentials.
 
-<a id="subscriptions"></a>
+<a id="subscription-lifecycle-ringcentral-example"></a>
 ## 10. Subscription lifecycle: RingCentral example
 
 ![Subscription lifecycle](diagrams/subscription-lifecycle.svg)
 
 > **Say it like this:** "Lifecycle work runs per tenant inside its own actor, so an expired token or a failed renewal affects one tenant, not the platform."
 
-<a id="debugging"></a>
+<a id="debugging-with-90-minutes-of-talk-time"></a>
 ## 11. Debugging with 90 minutes of talk time
 
 ![Debugging setup](diagrams/debugging.svg)
@@ -151,12 +151,12 @@ The technical detail behind the [Presence Sync story](README.md). In these diagr
 - We mirrored dev events from partner R&D accounts to our own machines, so routine debugging stopped using up talk time.
 - **A related problem:** the upstream contact-center team sometimes changed its events without notice, which broke PSA in Dev or Stage. The SyntheticMonitor watched those events in production and flagged changes before they caused problems.
 
-<a id="timeline"></a>
+<a id="timeline-how-it-grew"></a>
 ## 12. Timeline: how it grew
 
 ![Timeline](diagrams/timeline.svg)
 
-<a id="partners"></a>
+<a id="supported-partners"></a>
 ## 13. Supported partners
 
 In the order they were added:
