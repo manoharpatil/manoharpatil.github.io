@@ -67,7 +67,7 @@ Scala, Java, Go, Akka, Play, Slick, gRPC, Angular, Redis, PostgreSQL, DynamoDB, 
 - **Phone platform to contact center (orange):** an internal call on her work phone makes her Unavailable-UC in the contact center, so no customer is routed to her.
 - **Rules** map each contact-center state to a phone-platform status, in one direction or both.
 
-### Components
+### How the components fit together
 
 ![Presence Sync architecture](diagrams/architecture.svg)
 
